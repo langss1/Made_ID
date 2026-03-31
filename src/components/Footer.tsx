@@ -1,8 +1,21 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { Send, Linkedin, Twitter, MessageSquare } from 'lucide-react';
+import { SendHorizontal, MessageSquare, Mail, Link as LinkIcon } from 'lucide-react';
 import Link from 'next/link';
+
+// Custom Brand Icons as SVGs to replace missing lucide-react brand icons
+const LinkedInIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>
+  </svg>
+);
+
+const XIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 4l11.733 16h4.267l-11.733 -16z" /><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+  </svg>
+);
 
 export default function Footer() {
   return (
@@ -60,7 +73,7 @@ export default function Footer() {
               }}
             >
               Request Early Access
-              <Send size={18} />
+              <SendHorizontal size={18} />
             </motion.button>
           </div>
         </section>
@@ -101,10 +114,10 @@ export default function Footer() {
           </div>
           <div>
             <h4 style={{ color: 'var(--primary)', fontWeight: '700', marginBottom: '20px' }}>Connect</h4>
-            <div style={{ display: 'flex', gap: '20px' }}>
-              <Linkedin size={20} color="#666" />
-              <Twitter size={20} color="#666" />
-              <MessageSquare size={20} color="#666" />
+            <div style={{ display: 'flex', gap: '20px', color: '#666' }}>
+              <LinkedInIcon />
+              <XIcon />
+              <MessageSquare size={20} />
             </div>
           </div>
         </div>
