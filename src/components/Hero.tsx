@@ -143,6 +143,7 @@ export default function Hero() {
               animate={stage === 2 ? { scale: 0.95, filter: "brightness(0.8)" } : { scale: 1 }}
               className="btn-primary" 
               style={{ borderRadius: "40px", padding: "12px 28px", boxShadow: "none", position: "relative" }}
+              suppressHydrationWarning
             >
               <AnimatePresence mode="wait">
                 {stage < 3 ? (

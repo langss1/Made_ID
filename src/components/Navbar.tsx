@@ -54,13 +54,11 @@ export default function Navbar() {
         </Link>
         
         {/* Desktop Menu */}
-        <div className="desktop-links" style={{ display: "flex", gap: "2.5rem", alignItems: "center" }}>
+        <div className="desktop-links" style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
           {navLinks.map((link) => (
-            <motion.div key={link.name} whileHover={{ y: -2 }}>
-              <Link href={link.href} className="nav-link">
-                {link.name}
-              </Link>
-            </motion.div>
+            <Link key={link.name} href={link.href} className="nav-link">
+              {link.name}
+            </Link>
           ))}
         </div>
 
