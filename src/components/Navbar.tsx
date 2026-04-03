@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const [mounted, setMounted] = useState(false);
@@ -54,20 +54,14 @@ export default function Navbar() {
         </Link>
         
         {/* Desktop Menu */}
-        <div className="desktop-links" style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+        <div className="desktop-links" style={{ display: "flex", gap: "2.5rem", alignItems: "center" }}>
           {navLinks.map((link) => (
-            <Link key={link.name} href={link.href} className="nav-link">
-              {link.name}
-            </Link>
+            <motion.div key={link.name} whileHover={{ y: -2 }}>
+              <Link href={link.href} className="nav-link">
+                {link.name}
+              </Link>
+            </motion.div>
           ))}
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="btn-primary"
-            style={{ padding: "10px 24px", borderRadius: "12px", fontSize: "0.95rem" }}
-          >
-            Join Waitlist <ArrowRight size={16} />
-          </motion.button>
         </div>
 
         {/* Mobile Toggle */}
@@ -111,9 +105,6 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <button className="btn-primary" style={{ width: "100%", padding: "1rem" }}>
-              Join Waitlist
-            </button>
           </motion.div>
         )}
       </AnimatePresence>
