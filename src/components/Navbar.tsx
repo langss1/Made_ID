@@ -6,16 +6,24 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
 
 export default function Navbar() {
+  const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    setMounted(true);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  if (!mounted) return (
+    <nav className="glass-nav" style={{ padding: "1.25rem 1.5rem" }}>
+      <div style={{ maxWidth: "1400px", margin: "0 auto", display: "flex", justifyContent: "space-between" }}>
+        <div style={{ fontSize: "1.75rem", fontWeight: "800", color: "var(--primary)" }}>MADE<span style={{ color: "var(--secondary)" }}>.id</span></div>
+      </div>
+    </nav>
+  );
 
   const navLinks = [
     { name: "Features", href: "#features" },
@@ -25,11 +33,13 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className={`glass-nav ${scrolled ? "scrolled" : ""}`}>
+    <nav className={`glass-nav ${scrolled ? "scrolled" : ""}`} style={{ 
+      transition: "padding 0.4s ease", 
+      padding: scrolled ? "0.75rem 1.5rem" : "1.25rem 1.5rem" 
+    }}>
       <div style={{ 
         maxWidth: "1400px", 
         margin: "0 auto", 
-        padding: "1rem 1.5rem", 
         display: "flex", 
         justifyContent: "space-between", 
         alignItems: "center" 
@@ -38,105 +48,88 @@ export default function Navbar() {
           fontSize: "1.75rem", 
           fontWeight: "800", 
           color: "var(--primary)", 
-          letterSpacing: "-0.75px",
-          display: "flex",
-          alignItems: "center"
+          letterSpacing: "-0.75px"
         }}>
           MADE<span style={{ color: "var(--secondary)" }}>.id</span>
         </Link>
         
         {/* Desktop Menu */}
-        <ul style={{ display: "none", gap: "2.5rem", alignItems: "center", fontWeight: "600", color: "var(--gray-dark)" }} className="desktop-nav">
+        <div className="desktop-links" style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
           {navLinks.map((link) => (
-            <li key={link.name}>
-              <Link href={link.href} className="nav-link-hover">
-                {link.name}
-              </Link>
-            </li>
+            <Link key={link.name} href={link.href} className="nav-link">
+              {link.name}
+            </Link>
           ))}
-          <li>
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-primary"
-            >
-              Join Waitlist
-              <ArrowRight size={18} />
-            </motion.button>
-          </li>
-        </ul>
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="btn-primary"
+            style={{ padding: "10px 24px", borderRadius: "12px", fontSize: "0.95rem" }}
+          >
+            Join Waitlist <ArrowRight size={16} />
+          </motion.button>
+        </div>
 
         {/* Mobile Toggle */}
-        <div style={{ display: "none" }} className="mobile-toggle">
-          <button 
-            onClick={() => setIsOpen(!isOpen)} 
-            style={{ background: "transparent", border: "none", color: "var(--primary)", cursor: "pointer" }}
-          >
-            {isOpen ? <X size={28} /> : <Menu size={28} />}
-          </button>
-        </div>
+        <button 
+          className="mobile-btn"
+          onClick={() => setIsOpen(!isOpen)} 
+          style={{ background: "transparent", border: "none", color: "var(--primary)", cursor: "pointer", display: "none" }}
+        >
+          {isOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
       </div>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
             style={{ 
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              right: 0,
               background: "white", 
               borderTop: "1px solid var(--gray-medium)", 
-              overflow: "hidden", 
-              boxShadow: "var(--shadow-lg)"
+              padding: "2rem 1.5rem",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+              display: "flex",
+              flexDirection: "column",
+              gap: "1.5rem"
             }}
           >
-            <ul style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-              {navLinks.map((link) => (
-                <li key={link.name}>
-                  <Link 
-                    href={link.href} 
-                    onClick={() => setIsOpen(false)}
-                    style={{ 
-                      fontSize: "1.2rem", 
-                      fontWeight: "600", 
-                      color: "var(--primary)",
-                      display: "block",
-                      padding: "0.5rem 0"
-                    }}
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-              <li style={{ marginTop: "0.5rem" }}>
-                <button className="btn-primary" style={{ width: "100%", padding: "1rem" }}>
-                  Join Waitlist
-                </button>
-              </li>
-            </ul>
+            {navLinks.map((link) => (
+              <Link 
+                key={link.name} 
+                href={link.href} 
+                onClick={() => setIsOpen(false)}
+                style={{ fontSize: "1.1rem", fontWeight: "700", color: "var(--primary)" }}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <button className="btn-primary" style={{ width: "100%", padding: "1rem" }}>
+              Join Waitlist
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
 
       <style jsx>{`
-        @media (min-width: 992px) {
-          .desktop-nav { display: flex !important; }
-          .mobile-toggle { display: none !important; }
+        .nav-link {
+          font-weight: 700;
+          color: var(--gray-dark);
+          transition: 0.3s;
+          font-size: 0.95rem;
         }
+        .nav-link:hover { color: var(--secondary); }
+        
         @media (max-width: 991px) {
-          .desktop-nav { display: none !important; }
-          .mobile-toggle { display: block !important; }
-        }
-        .nav-link-hover {
-          transition: color 0.3s ease;
-        }
-        .nav-link-hover:hover {
-          color: var(--secondary);
-        }
-        .scrolled {
-          padding: 0.5rem 0 !important;
-          box-shadow: var(--shadow);
+          .desktop-links { display: none !important; }
+          .mobile-btn { display: block !important; }
         }
       `}</style>
     </nav>

@@ -5,10 +5,12 @@ import { motion } from "framer-motion";
 import { Play, Calendar, Zap } from "lucide-react";
 
 export default function Countdown() {
+  const [mounted, setMounted] = useState(false);
   const targetDate = new Date("2026-08-31T00:00:00").getTime();
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
+    setMounted(true);
     const timer = setInterval(() => {
       const now = new Date().getTime();
       const distance = targetDate - now;
@@ -28,6 +30,8 @@ export default function Countdown() {
     return () => clearInterval(timer);
   }, [targetDate]);
 
+  if (!mounted) return null;
+
   const units = [
     { label: "Days", value: timeLeft.days },
     { label: "Hours", value: timeLeft.hours },
@@ -46,8 +50,8 @@ export default function Countdown() {
         textAlign: "center",
         boxShadow: "var(--shadow-lg)"
       }}>
-        {/* Video Background Layer (Assume build.mp4 exists in public) */}
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.25, zIndex: 0 }}>
+        {/* Video Background Layer */}
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.2, zIndex: 0 }}>
           <video 
             autoPlay 
             loop 
@@ -56,7 +60,6 @@ export default function Countdown() {
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           >
             <source src="/build.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
           </video>
         </div>
 
@@ -118,7 +121,7 @@ export default function Countdown() {
             Kami sedang mematangkan "Export OS Engine" untuk menjamin presisi Audit AI di seluruh wilayah Indonesia.
           </p>
           
-          <div style={{ marginTop: "40px", display: "flex", justifyContent: "center", gap: "20px" }}>
+          <div style={{ marginTop: "40px", display: "flex", justifyContent: "center", gap: "20px", flexWrap: "wrap" }}>
              <button className="btn-primary" style={{ background: "white", color: "var(--primary)" }}>
                 Watch Teaser <Play size={18} fill="var(--primary)" />
              </button>
