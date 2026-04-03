@@ -50,6 +50,7 @@ export default function Footer() {
             <input 
               type="email" 
               placeholder="Enter your email" 
+              suppressHydrationWarning
               style={{ 
                 flex: 1, 
                 padding: '15px 25px', 

@@ -97,7 +97,7 @@ export default function Hero() {
               <motion.span animate={{ opacity: [0, 1, 0] }} transition={{ repeat: Infinity, duration: 0.8 }} 
                 style={{ width: "2px", height: "1.4rem", background: "var(--secondary)", display: "inline-block", verticalAlign: "middle", marginLeft: "4px" }} />
             </div>
-            <button className="btn-primary" style={{ borderRadius: "40px", padding: "12px 28px", boxShadow: "none" }}>
+            <button className="btn-primary" suppressHydrationWarning style={{ borderRadius: "40px", padding: "12px 28px", boxShadow: "none" }}>
               <Sparkles size={18} /> <span>Generate Matches</span>
             </button>
           </div>
