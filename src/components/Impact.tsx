@@ -1,73 +1,45 @@
 "use client";
 
-import { motion } from 'framer-motion';
-import { TrendingUp, Factory, Users, Globe2 } from 'lucide-react';
-import Image from 'next/image';
-
-const impactItems = [
-  { icon: <TrendingUp size={28} />, title: "Peningkatan Devisa", desc: "Boosting national foreign exchange reserves through AI-optimized exports." },
-  { icon: <Factory size={28} />, title: "Hilirisasi Industri", desc: "Accelerating industrial downstreaming by connecting local factories to global demand." },
-  { icon: <Users size={28} />, title: "Lapangan Kerja", desc: "Creating high-value jobs by empowering local SMEs with global reach." },
-  { icon: <Globe2 size={28} />, title: "Soft Power Indonesia", desc: "Projecting Indonesian quality and reliability on the world stage." }
-];
+import { motion } from "framer-motion";
+import { TrendingUp, Award, Users, Globe } from "lucide-react";
 
 export default function Impact() {
+  const impacts = [
+    { label: "Pertumbuhan Devisa", value: "+24%", desc: "Target kenaikan devisa riil dari ekspor non-migas UMKM melalui efisiensi audit AI.", icon: <TrendingUp /> },
+    { label: "Hilirisasi Digital", value: "3.500+", desc: "UMKM bertransformasi dari penjual produk mentah menjadi produk bernilai tambah tinggi.", icon: <Award /> },
+    { label: "Penyerapan Kerja", value: "1.2jt", desc: "Menciptakan lapangan kerja baru di sektor produksi & pengolahan ekspor yang berkelanjutan.", icon: <Users /> },
+    { label: "Soft Power Niaga", value: "Global", desc: "Meningkatkan kepercayaan dunia pada produk asli Indonesia (Made in Indonesia).", icon: <Globe /> }
+  ];
+
   return (
-    <section id="impact" style={{ padding: '100px 20px', background: 'var(--primary)', color: 'white', opacity: 1 }}>
-      <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-        <h2 style={{ fontSize: '2.8rem', fontWeight: '800', marginBottom: '20px' }}>
-          National Strategic <span style={{ color: 'var(--secondary)' }}>Impact</span>
-        </h2>
-        <p style={{ fontSize: '1.2rem', opacity: 0.8, maxWidth: '700px', margin: '0 auto' }}>
-          Moving beyond trade. Building Indonesia into a global export powerhouse.
-        </p>
-      </div>
-
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', 
-        gap: '40px' 
-      }}>
-        {impactItems.map((item, idx) => (
-          <motion.div 
-            key={idx}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            style={{ textAlign: 'center' }}
-          >
-            <div style={{ 
-              width: '80px', height: '80px', borderRadius: '50%', 
-              background: 'rgba(255, 255, 255, 0.1)', 
-              display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              margin: '0 auto 25px', color: 'var(--secondary)',
-              border: '1px solid rgba(255, 255, 255, 0.2)'
-            }}>
-              {item.icon}
-            </div>
-            <h3 style={{ fontSize: '1.3rem', fontWeight: '700', marginBottom: '15px' }}>{item.title}</h3>
-            <p style={{ opacity: 0.7, lineHeight: '1.6', fontSize: '0.95rem' }}>{item.desc}</p>
-          </motion.div>
-        ))}
-      </div>
-
-      <div style={{ 
-        marginTop: '80px', 
-        padding: '40px', 
-        background: 'rgba(0, 0, 0, 0.2)', 
-        borderRadius: '24px', 
-        display: 'flex', 
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '20px'
-      }}>
-        <div style={{ width: '100%', height: '150px', position: 'relative', borderRadius: '12px', overflow: 'hidden' }}>
-          <Image src="/impact.png" alt="national impact" layout="fill" objectFit="contain" />
+    <section id="impact" style={{ padding: "100px 24px", background: "white" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "60px", marginBottom: "80px" }}>
+        <div style={{ flex: "1 1 500px" }}>
+          <h2 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", color: "var(--primary)", fontWeight: "900", marginBottom: "20px" }}>National Strategic Impact</h2>
+          <p style={{ color: "var(--gray-dark)", fontSize: "1.2rem", lineHeight: "1.6" }}>
+            MADE.id bukan sekadar platform dagang; kami adalah infrastruktur bagi transformasi ekonomi nasional. 
+            Membangun kedaulatan data ekspor & kemandirian UMKM Indonesia.
+          </p>
         </div>
-        <p style={{ textAlign: 'center', fontStyle: 'italic', opacity: 0.6 }}>
-          "Leading Indonesia towards the Golden Era 2045 through data-driven export excellence."
-        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "25px", flex: "1 1 500px" }}>
+          {impacts.map((impact, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              style={{ padding: "30px", background: "var(--gray-light)", borderRadius: "24px" }}
+            >
+              <div style={{ color: idx % 2 === 0 ? "var(--secondary)" : "var(--primary)", marginBottom: "15px" }}>
+                {impact.icon}
+              </div>
+              <div style={{ fontSize: "2rem", fontWeight: "900", color: "var(--primary)", marginBottom: "5px" }}>{impact.value}</div>
+              <div style={{ fontWeight: "800", color: "var(--secondary)", fontSize: "0.9rem", marginBottom: "10px", textTransform: "uppercase" }}>{impact.label}</div>
+              <p style={{ fontSize: "0.85rem", color: "var(--gray-dark)", lineHeight: "1.4" }}>{impact.desc}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

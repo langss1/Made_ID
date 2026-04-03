@@ -1,112 +1,120 @@
 "use client";
 
-import { motion } from 'framer-motion';
-import { Cpu, Eye, ShieldCheck, BarChart4, Headphones, LayoutDashboard } from 'lucide-react';
-import Image from 'next/image';
-
-const features = [
-  {
-    title: "For Global Buyers",
-    subtitle: "AI Prompt-Based Engine & Virtual Audit",
-    description: "Search for suppliers using natural language. Our AI evaluates, verifies, and provides virtual on-site audits via multi-modal AI and VR ready interfaces.",
-    icons: [<Cpu key="1" />, <Eye key="2" />],
-    images: ["/ai_brain.png", "/vr_headset.png"]
-  },
-  {
-    title: "For Indonesian UMKM",
-    subtitle: "Export Readiness & Compliance Twin",
-    description: "Automated Export Readiness Score and Compliance Gap Analysis. Get your SME ready for global certification in days, not months.",
-    icons: [<ShieldCheck key="1" />, <Headphones key="2" />]
-  },
-  {
-    title: "For Government",
-    subtitle: "Export Command Center",
-    description: "Real-time national export dashboard providing data-driven policy insights and hilirisasi monitoring at a glance.",
-    icons: [<BarChart4 key="1" />, <LayoutDashboard key="2" />]
-  }
-];
+import { motion } from "framer-motion";
+import { Bot, ShieldCheck, PieChart, Zap, Search, Fingerprint } from "lucide-react";
 
 export default function Features() {
+  const features = [
+    {
+      title: "Agentic AI Audit",
+      desc: "Sistem cerdas yang mengaudit produk UMKM secara otomatis untuk kesiapan ekspor, standardisasi, dan kepatuhan global.",
+      icon: <Bot size={28} />,
+      color: "var(--secondary)"
+    },
+    {
+      title: "Self-Verifying Network",
+      desc: "Buyer global dapat memverifikasi kualitas pabrik dan etika kerja secara mendalam tanpa harus datang ke lokasi.",
+      icon: <ShieldCheck size={28} />,
+      color: "#3b82f6"
+    },
+    {
+      title: "Real-time Compliance",
+      desc: "Monitoring berkelanjutan untuk memastikan regulasi ekspor yang sering berubah tetap dipenuhi secara presisi.",
+      icon: <Fingerprint size={28} />,
+      color: "#8b5cf6"
+    },
+    {
+      title: "Strategic Impact Hub",
+      desc: "Platform khusus pemerintah untuk memonitor dampak hilirisasi, devisa, dan soft power diplomasi niaga Indonesia.",
+      icon: <PieChart size={28} />,
+      color: "#f59e0b"
+    }
+  ];
+
   return (
-    <section id="features" style={{ padding: '100px 20px' }}>
-      <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-        <h2 style={{ fontSize: '3rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '20px' }}>
-          Core Infrastructure
-        </h2>
-        <p style={{ fontSize: '1.2rem', color: '#666', maxWidth: '700px', margin: '0 auto' }}>
-          Three dedicated engines driving the future of Indonesian trade.
+    <section id="features" style={{ padding: "120px 24px" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "80px", gap: "30px" }}>
+        <div style={{ maxWidth: "600px" }}>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            style={{ 
+              color: "var(--secondary)", 
+              fontWeight: "800", 
+              letterSpacing: "0.1em", 
+              marginBottom: "15px",
+              fontSize: "0.9rem"
+            }}
+          >
+            MADE.ID OS ENGINE
+          </motion.div>
+          <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", lineHeight: "1.1", fontWeight: "900" }}>
+            The Intelligence <br /> 
+            <span style={{ color: "var(--secondary)" }}>Behind the Export.</span>
+          </h2>
+        </div>
+        <p style={{ color: "var(--gray-dark)", fontSize: "1.1rem", maxWidth: "400px", lineHeight: "1.6" }}>
+          Kami menggabungkan data intelijen dan Agentic AI untuk membangun jembatan kepercayaan niaga internasional.
         </p>
       </div>
 
       <div className="grid-3">
         {features.map((feature, idx) => (
-          <motion.div 
+          <motion.div
             key={idx}
-            whileHover={{ scale: 1.02 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: idx * 0.1 }}
             className="glowing-card"
-            style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              gap: '20px',
-              border: idx === 0 ? '2px solid var(--secondary)' : '1px solid var(--gray-medium)',
-              position: 'relative',
-              overflow: 'hidden'
-            }}
+            style={{ position: "relative", zIndex: 1 }}
           >
-            {idx === 0 && (
-              <div style={{ 
-                position: 'absolute', top: '15px', right: '15px', 
-                background: 'var(--secondary)', color: 'white', 
-                padding: '4px 12px', borderRadius: '50px', fontSize: '0.8rem', fontWeight: '700'
-              }}>
-                POPULAR
-              </div>
-            )}
+            <div className="feature-icon-wrapper" style={{ 
+              background: `rgba(${feature.color}, 0.1)`, 
+              color: feature.color 
+            }}>
+              {feature.icon}
+            </div>
+            <h3 style={{ fontSize: "1.5rem", marginBottom: "15px", fontWeight: "800", color: "var(--primary)" }}>{feature.title}</h3>
+            <p style={{ color: "var(--gray-dark)", lineHeight: "1.6", fontSize: "1rem" }}>{feature.desc}</p>
             
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <div className="feature-icon">
-                {feature.icons[0]}
-              </div>
-              {feature.icons[1] && (
-                <div className="feature-icon" style={{ background: 'rgba(0, 59, 92, 0.1)', color: 'var(--primary)' }}>
-                  {feature.icons[1]}
-                </div>
-              )}
-            </div>
-
-            <div>
-              <h4 style={{ color: 'var(--secondary)', fontSize: '0.9rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '10px' }}>
-                {feature.title}
-              </h4>
-              <h3 style={{ fontSize: '1.6rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '15px' }}>
-                {feature.subtitle}
-              </h3>
-              <p style={{ color: '#555', lineHeight: '1.7', marginBottom: '20px' }}>
-                {feature.description}
-              </p>
-            </div>
-
-            <div style={{ marginTop: 'auto' }}>
-              {feature.images && (
-                <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                  {feature.images.map((img, i) => (
-                    <div key={i} style={{ width: '40px', height: '40px', position: 'relative', borderRadius: '8px', overflow: 'hidden', border: '1px solid #eee' }}>
-                      <Image src={img} alt="icon" layout="fill" objectFit="cover" />
-                    </div>
-                  ))}
-                </div>
-              )}
-              <button style={{ 
-                background: 'transparent', border: 'none', color: 'var(--secondary)', 
-                fontWeight: '700', fontSize: '1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px',
-                padding: '0'
-              }}>
-                Learn More →
-              </button>
-            </div>
+            <motion.div 
+              whileHover={{ x: 5 }}
+              style={{ 
+                marginTop: "25px", 
+                display: "flex", 
+                alignItems: "center", 
+                gap: "8px", 
+                color: "var(--primary)", 
+                fontWeight: "700", 
+                cursor: "pointer",
+                fontSize: "0.95rem"
+              }}
+            >
+              Pelajari lebih lanjut <Zap size={16} fill="var(--primary)" />
+            </motion.div>
           </motion.div>
         ))}
       </div>
+
+      <style jsx>{`
+        .glowing-card::after {
+          content: "";
+          position: absolute;
+          top: -20px;
+          right: -20px;
+          width: 80px;
+          height: 80px;
+          background: radial-gradient(circle, rgba(var(--secondary-rgb), 0.1) 0%, transparent 70%);
+          z-index: -1;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        .glowing-card:hover::after {
+          opacity: 1;
+        }
+      `}</style>
     </section>
   );
 }

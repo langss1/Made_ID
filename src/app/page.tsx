@@ -4,8 +4,11 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Problem from "@/components/Problem";
 import Features from "@/components/Features";
-import Comparison from "@/components/Comparison";
+import Flow from "@/components/Flow";
+import Manfaat from "@/components/Manfaat";
 import Impact from "@/components/Impact";
+import Comparison from "@/components/Comparison";
+import Countdown from "@/components/Countdown";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -15,8 +18,11 @@ export default function Home() {
       <Hero />
       <Problem />
       <Features />
-      <Comparison />
+      <Flow />
+      <Manfaat />
       <Impact />
+      <Comparison />
+      <Countdown />
       <Footer />
     </main>
   );

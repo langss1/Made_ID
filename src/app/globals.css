@@ -7,12 +7,13 @@
   --foreground: #1A1A1A;
   --gray-light: #F5F7FA;
   --gray-medium: #E2E8F0;
+  --gray-dark: #4A5568;
   --accent: rgba(0, 163, 108, 0.1);
-  --glass: rgba(255, 255, 255, 0.7);
+  --glass: rgba(255, 255, 255, 0.85);
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   --glow-primary: 0 0 20px rgba(0, 59, 92, 0.3);
-  --glow-secondary: 0 0 20px rgba(0, 163, 108, 0.3);
+  --glow-secondary: 0 0 20px rgba(0, 163, 108, 0.4);
 }
 
 * {
@@ -31,103 +32,131 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-outfit), var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-outfit), var(--font-inter), sans-serif;
   -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-ul {
-  list-style: none;
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--primary);
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 /* Animations */
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
+@keyframes abstractLines {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
 }
 
-@keyframes pulse-glow {
-  0% { box-shadow: 0 0 5px rgba(0, 163, 108, 0.2); }
-  50% { box-shadow: 0 0 20px rgba(0, 163, 108, 0.5); }
-  100% { box-shadow: 0 0 5px rgba(0, 163, 108, 0.2); }
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Glassmorphism Header */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Components */
 .glass-nav {
   background: var(--glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 59, 92, 0.08);
   position: sticky;
   top: 0;
   z-index: 1000;
+  transition: all 0.3s ease;
 }
 
-/* Section Spacing */
+.hero-bg-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  opacity: 0.4;
+  background-image: 
+    linear-gradient(rgba(0, 163, 108, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 163, 108, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(circle at center, black, transparent 80%);
+}
+
+.hero-abstract-line {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 163, 108, 0.1) 0%, transparent 60%);
+  animation: abstractLines 20s infinite linear;
+  z-index: -2;
+}
+
+/* Responsive Utilities */
 section {
-  padding: 80px 20px;
-  max-width: 1200px;
+  padding: 100px 24px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
-.hero-gradient {
-  background: radial-gradient(circle at 10% 20%, rgba(0, 59, 92, 0.05) 0%, rgba(255, 255, 255, 1) 90%);
+@media (max-width: 768px) {
+  section {
+    padding: 60px 20px;
+  }
 }
 
-/* Grid Layouts */
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  margin-top: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
 }
 
-/* Comparison Table Styling */
-.comparison-container {
+@media (max-width: 480px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mobile-carousel {
+  display: flex;
   overflow-x: auto;
-  margin-top: 40px;
-  border-radius: 16px;
-  border: 1px solid var(--gray-medium);
-  background: white;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding-bottom: 20px;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
+.mobile-carousel::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
-th, td {
-  padding: 20px;
-  border-bottom: 1px solid var(--gray-medium);
-}
-
-th {
-  background: var(--gray-light);
-  color: var(--primary);
-  font-weight: 700;
-}
-
-.made-id-col {
-  background: rgba(0, 163, 108, 0.05);
-  font-weight: 600;
+.carousel-item {
+  scroll-snap-align: center;
+  flex: 0 0 85%;
 }
 
 /* UI Elements */
 .btn-primary {
   background: var(--primary);
   color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
+  padding: 14px 32px;
+  border-radius: 12px;
   font-weight: 600;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-primary:hover {
@@ -136,73 +165,132 @@ th {
   box-shadow: var(--glow-primary);
 }
 
-.btn-outline {
-  border: 2px solid var(--primary);
-  color: var(--primary);
-  padding: 10px 22px;
-  border-radius: 8px;
-  font-weight: 600;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-outline:hover {
-  background: var(--primary);
-  color: white;
-}
-
 .glowing-card {
   background: white;
-  border-radius: 20px;
-  padding: 30px;
+  border-radius: 24px;
+  padding: 40px;
   border: 1px solid var(--gray-medium);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
 }
 
 .glowing-card:hover {
   border-color: var(--secondary);
-  box-shadow: var(--glow-secondary);
-  transform: translateY(-5px);
-}
-
-/* AI Prompt Bar */
-.ai-search-bar {
-  background: white;
-  border: 1px solid var(--gray-medium);
-  border-radius: 50px;
-  padding: 8px 12px 8px 24px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
   box-shadow: var(--shadow-lg);
-  max-width: 800px;
-  margin: 40px auto;
-  transition: border-color 0.3s ease;
-}
-
-.ai-search-bar:focus-within {
-  border-color: var(--secondary);
-  box-shadow: var(--glow-secondary);
-}
-
-.ai-search-bar input {
-  border: none;
-  outline: none;
-  flex: 1;
-  font-size: 1.1rem;
-  color: var(--foreground);
+  transform: translateY(-8px);
 }
 
 /* Feature Icon Wrapper */
-.feature-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 12px;
-  background: rgba(0, 163, 108, 0.1);
+.feature-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--secondary);
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  transition: all 0.3s ease;
+}
+
+.glowing-card:hover .feature-icon-wrapper {
+  background: var(--secondary);
+  color: white;
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Comparison Table */
+.comparison-container {
+  overflow-x: auto;
+  border-radius: 24px;
+  border: 1px solid var(--gray-medium);
+  box-shadow: var(--shadow);
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.comparison-table th {
+  background: var(--gray-light);
+  padding: 24px;
+  text-align: left;
+  border-bottom: 2px solid var(--gray-medium);
+}
+
+.comparison-table td {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--gray-medium);
+}
+
+/* Countdown Styles */
+.countdown-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.countdown-box {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  min-width: 100px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-medium);
+}
+
+.countdown-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--secondary);
+  display: block;
+}
+
+.countdown-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--gray-dark);
+  letter-spacing: 1px;
+}
+
+/* Flow Steps */
+.flow-step {
+  position: relative;
+  padding-left: 50px;
+  margin-bottom: 40px;
+}
+
+.flow-step::before {
+  content: '';
+  position: absolute;
+  left: 17px;
+  top: 34px;
+  bottom: -40px;
+  width: 2px;
+  background: var(--gray-medium);
+}
+
+.flow-step:last-child::before {
+  display: none;
+}
+
+.flow-number {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--secondary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  z-index: 1;
 }
