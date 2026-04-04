@@ -5,53 +5,72 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, Sparkles, Database, CheckCircle, MessageCircle, Truck, PackageCheck, Star } from "lucide-react";
 
 export default function Hero() {
+  const [mounted, setMounted] = useState(false);
   const [displayText, setDisplayText] = useState("");
   const [stage, setStage] = useState(1); // 1: typing, 2: clicked, 3: matching, 4: results
   const fullText = "I need a organic coffee supplier from West Java...";
   
+  // Single mounting effect
   useEffect(() => {
-    if (stage === 1) {
-      let i = 0;
-      const interval = setInterval(() => {
-        setDisplayText(fullText.slice(0, i));
-        i++;
-        if (i > fullText.length) {
-          clearInterval(interval);
-          setTimeout(() => setStage(2), 1500);
-        }
-      }, 70);
-      return () => clearInterval(interval);
-    }
-  }, [stage]);
+    setMounted(true);
+  }, []);
 
+  // Stage 1: Typing effect logic
   useEffect(() => {
+    if (!mounted || stage !== 1) return;
+
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayText(fullText.slice(0, i));
+      i++;
+      if (i > fullText.length) {
+        clearInterval(interval);
+        const timer = setTimeout(() => setStage(2), 1500);
+        return () => clearTimeout(timer);
+      }
+    }, 70);
+    return () => clearInterval(interval);
+  }, [mounted, stage]);
+
+  // Transitions for stages 2, 3, 4
+  useEffect(() => {
+    if (!mounted) return;
+
+    let timer: NodeJS.Timeout;
+
     if (stage === 2) {
-      const timer = setTimeout(() => setStage(3), 800);
-      return () => clearTimeout(timer);
-    }
-    if (stage === 3) {
-      const timer = setTimeout(() => setStage(4), 4000);
-      return () => clearTimeout(timer);
-    }
-    if (stage === 4) {
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => setStage(3), 800);
+    } else if (stage === 3) {
+      timer = setTimeout(() => setStage(4), 4000);
+    } else if (stage === 4) {
+      timer = setTimeout(() => {
+        setdisplayText(""); // Reseting display text before loop
         setStage(1);
-        setDisplayText("");
       }, 6000);
-      return () => clearTimeout(timer);
     }
-  }, [stage]);
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [mounted, stage]);
+
+  // Local helper to avoid re-renders during state transitions
+  const setdisplayText = (val: string) => {
+    setDisplayText(val);
+  };
+
+  if (!mounted) return null;
 
   const flowSteps = [
-    { label: "Recommend", icon: <Star size={18} />, color: "#f59e0b" },
-    { label: "Review", icon: <Database size={18} />, color: "#3b82f6" },
-    { label: "Chat AI", icon: <MessageCircle size={18} />, color: "var(--secondary)" },
-    { label: "Delivery", icon: <Truck size={18} />, color: "#8b5cf6" },
-    { label: "Success", icon: <PackageCheck size={18} />, color: "var(--secondary)" }
+    { label: "Recommend", icon: <Star size={16} />, color: "#f59e0b" },
+    { label: "Review", icon: <Database size={16} />, color: "#3b82f6" },
+    { label: "Chat AI", icon: <MessageCircle size={16} />, color: "var(--secondary)" },
+    { label: "Delivery", icon: <Truck size={16} />, color: "#8b5cf6" },
+    { label: "Success", icon: <PackageCheck size={16} />, color: "var(--secondary)" }
   ];
 
   return (
-    <section className="hero-section" style={{ 
+    <section className="hero-section" suppressHydrationWarning style={{ 
       textAlign: "center", 
       paddingTop: "180px",
       paddingBottom: "120px",
@@ -71,7 +90,7 @@ export default function Hero() {
         style={{ position: "relative", zIndex: 10 }}
       >
         <h1 style={{ 
-          fontSize: "clamp(2.75rem, 8vw, 5.5rem)", 
+          fontSize: "clamp(2.5rem, 8vw, 5.5rem)", 
           fontWeight: "900", 
           color: "var(--primary)", 
           lineHeight: "1.05",
@@ -88,7 +107,7 @@ export default function Hero() {
         </h1>
         
         <p style={{ 
-          fontSize: "clamp(1.1rem, 2vw, 1.4rem)", 
+          fontSize: "clamp(1rem, 2vw, 1.4rem)", 
           color: "var(--gray-dark)", 
           maxWidth: "750px", 
           margin: "0 auto 60px",
@@ -98,8 +117,7 @@ export default function Hero() {
         }}>
           Simpler, Faster, and Intelligent. The AI ecosystem that transforms traditional trade into a future-ready export network.
         </p>
-
-        {/* Dynamic AI Sequence Simulator */}
+        
         <div style={{ maxWidth: "850px", margin: "0 auto", padding: "0 20px" }}>
           <div className="ai-search-bar" style={{ 
             background: "white", 
@@ -112,8 +130,8 @@ export default function Hero() {
             border: "1px solid var(--gray-medium)",
             minHeight: "75px"
           }}>
-            <Search size={24} color="var(--secondary)" />
-            <div style={{ flex: 1, textAlign: "left", fontSize: "1.1rem", fontWeight: "600", color: "var(--primary)" }}>
+            <Search size={22} className="hero-search-icon" color="var(--secondary)" />
+            <div style={{ flex: 1, textAlign: "left", fontSize: "1.1rem", fontWeight: "600", color: "var(--primary)" }} className="hero-search-text">
               <AnimatePresence mode="wait">
                 {stage === 1 && (
                   <motion.span key="typing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -127,9 +145,9 @@ export default function Hero() {
                      {stage === 2 && "Initiating Agentic Match..."}
                      {stage === 3 && (
                        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                          <span style={{ color: "var(--secondary)", fontSize: "1rem" }}>Processing Agents</span>
+                          <span style={{ color: "var(--secondary)", fontSize: "0.95rem" }}>Processing Agents</span>
                           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }}>
-                             <Sparkles size={18} color="var(--secondary)" />
+                             <Sparkles size={16} color="var(--secondary)" />
                           </motion.div>
                        </div>
                      )}
@@ -138,7 +156,7 @@ export default function Hero() {
                 )}
               </AnimatePresence>
             </div>
-
+            
             <motion.button 
               animate={stage === 2 ? { scale: 0.95, filter: "brightness(0.8)" } : { scale: 1 }}
               className="btn-primary" 
@@ -149,23 +167,22 @@ export default function Hero() {
                 {stage < 3 ? (
                   <motion.div key="btn-gen" style={{ display: "flex", alignItems: "center", gap: "8px" }}
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <Sparkles size={18} /> <span>Generate Matches</span>
+                    <Sparkles size={16} className="btn-icon" /> <span className="btn-text">Generate Matches</span>
                   </motion.div>
                 ) : (
                   <motion.div key="btn-done" style={{ color: "white", display: "flex", alignItems: "center", gap: "8px" }}
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                    <CheckCircle size={18} /> <span>Verified</span>
+                    <CheckCircle size={16} className="btn-icon" /> <span className="btn-text">Verified</span>
                   </motion.div>
                 )}
               </AnimatePresence>
             </motion.button>
           </div>
-
-          {/* Agentic Flow Animation Overlay */}
-          <div style={{ height: "100px", marginTop: "30px", position: "relative" }}>
+          
+          <div className="flow-container" style={{ height: "100px", marginTop: "30px", position: "relative" }}>
             <AnimatePresence>
               {stage >= 3 && (
-                <div style={{ display: "flex", justifyContent: "center", gap: "15px", alignItems: "center" }}>
+                <div style={{ display: "flex", justifyContent: "center", gap: "12px", alignItems: "center", flexWrap: "wrap" }} className="flow-steps-wrapper">
                   {flowSteps.map((step, idx) => (
                     <motion.div
                       key={step.label}
@@ -176,20 +193,21 @@ export default function Hero() {
                         y: 0
                       }}
                       transition={{ delay: idx * 0.4 }}
+                      className="flow-badge"
                       style={{ 
                         background: "white", 
-                        padding: "12px 20px", 
-                        borderRadius: "16px", 
+                        padding: "10px 16px", 
+                        borderRadius: "14px", 
                         boxShadow: "var(--shadow)",
                         border: "1px solid var(--gray-medium)",
                         display: "flex",
                         alignItems: "center",
-                        gap: "8px"
+                        gap: "6px"
                       }}
                     >
                       <div style={{ color: step.color }}>{step.icon}</div>
-                      <span style={{ fontSize: "0.9rem", fontWeight: "700", color: "var(--primary)" }}>{step.label}</span>
-                      {stage === 4 && <CheckCircle size={14} color="var(--secondary)" />}
+                      <span className="badge-text" style={{ fontSize: "0.85rem", fontWeight: "800", color: "var(--primary)" }}>{step.label}</span>
+                      {stage === 4 && <CheckCircle size={12} color="var(--secondary)" />}
                     </motion.div>
                   ))}
                 </div>
@@ -198,11 +216,32 @@ export default function Hero() {
           </div>
         </div>
       </motion.div>
-
+      
       <style jsx>{`
         @media (max-width: 768px) {
-          .ai-search-bar button span { display: none; }
-          .ai-search-bar { padding: 8px 8px 8px 18px !important; }
+          .btn-text { display: none; }
+          .ai-search-bar { 
+            padding: 8px 8px 8px 15px !important; 
+            min-height: 60px !important;
+            gap: 10px !important;
+          }
+          .hero-search-text { font-size: 0.9rem !important; }
+          .hero-search-icon { width: 18px !important; }
+          .btn-icon { width: 16px !important; }
+          
+          .flow-badge { 
+             padding: 6px 10px !important; 
+             border-radius: 10px !important;
+             gap: 4px !important;
+          }
+          .badge-text { font-size: 0.7rem !important; }
+          .flow-steps-wrapper { gap: 6px !important; }
+          .flow-container { height: auto !important; margin-top: 20px !important; }
+          
+          .hero-section {
+            padding-top: 140px !important;
+            padding-bottom: 80px !important;
+          }
         }
       `}</style>
     </section>

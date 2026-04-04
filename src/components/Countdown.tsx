@@ -2,18 +2,19 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Play, Calendar, Zap } from "lucide-react";
+import { CheckCircle2, Loader2, Calendar, Clock, Rocket } from "lucide-react";
+
+const TARGET_DATE = new Date("2026-08-31T00:00:00").getTime();
 
 export default function Countdown() {
   const [mounted, setMounted] = useState(false);
-  const targetDate = new Date("2026-08-31T00:00:00").getTime();
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
     setMounted(true);
     const timer = setInterval(() => {
       const now = new Date().getTime();
-      const distance = targetDate - now;
+      const distance = TARGET_DATE - now;
 
       if (distance < 0) {
         clearInterval(timer);
@@ -28,19 +29,26 @@ export default function Countdown() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [targetDate]);
+  }, [TARGET_DATE]);
 
   if (!mounted) return null;
 
+  const devStatus = [
+    { label: "PoC & Validation", status: "Finished", icon: <CheckCircle2 size={16} />, color: "var(--secondary)" },
+    { label: "Product Dev", status: "Ongoing", icon: <Loader2 size={16} className="animate-spin" />, color: "#fbbf24" },
+    { label: "Core AI Testing", status: "Upcoming", icon: <Clock size={16} />, color: "rgba(255,255,255,0.4)" },
+    { label: "Launch", status: "Upcoming", icon: <Rocket size={16} />, color: "rgba(255,255,255,0.4)" }
+  ];
+
   const units = [
-    { label: "Days", value: timeLeft.days },
-    { label: "Hours", value: timeLeft.hours },
-    { label: "Minutes", value: timeLeft.minutes },
-    { label: "Seconds", value: timeLeft.seconds }
+    { label: "HARI", value: timeLeft.days },
+    { label: "JAM", value: timeLeft.hours },
+    { label: "MENIT", value: timeLeft.minutes },
+    { label: "DETIK", value: timeLeft.seconds }
   ];
 
   return (
-    <section id="countdown" style={{ padding: "0 24px 100px", position: "relative" }}>
+    <section id="countdown" suppressHydrationWarning style={{ padding: "0 24px 100px", position: "relative" }}>
       <div style={{ 
         background: "var(--primary)", 
         borderRadius: "40px", 
@@ -49,9 +57,9 @@ export default function Countdown() {
         padding: "100px 40px",
         textAlign: "center",
         boxShadow: "var(--shadow-lg)"
-      }}>
+      }} className="countdown-box">
         {/* Video Background Layer */}
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.2, zIndex: 0 }}>
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15, zIndex: 0 }}>
           <video 
             autoPlay 
             loop 
@@ -71,66 +79,124 @@ export default function Countdown() {
             style={{ 
               display: "inline-flex", 
               alignItems: "center", 
-              gap: "10px", 
+              gap: "8px", 
               background: "rgba(255,255,255,0.1)", 
               color: "white", 
-              padding: "10px 25px", 
+              padding: "8px 18px", 
               borderRadius: "50px", 
               marginBottom: "30px",
               backdropFilter: "blur(10px)",
-              fontSize: "0.9rem",
+              fontSize: "0.85rem",
               fontWeight: "700"
             }}
           >
-            <Calendar size={18} />
-            TARGET LAUNCH: AUGUST 31, 2026
+            <Calendar size={16} />
+            TARGET LAUNCH: AUGUST 2026
           </motion.div>
 
-          <h2 style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)", color: "white", fontWeight: "900", marginBottom: "40px" }}>
+          <h2 style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)", color: "white", fontWeight: "900", marginBottom: "50px", letterSpacing: "-0.04em" }}>
             The Global Export Revolution <br /> Starts Now.
           </h2>
 
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "20px" }}>
+          <div style={{ 
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: "20px",
+            maxWidth: "900px",
+            margin: "0 auto 60px"
+          }} className="countdown-grid">
             {units.map((unit, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
+                className="countdown-card"
                 style={{ 
-                  background: "rgba(255,255,255,0.05)", 
-                  padding: "30px", 
+                  background: "white", 
+                  padding: "25px 10px", 
                   borderRadius: "24px", 
-                  minWidth: "140px",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  backdropFilter: "blur(10px)"
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+                  width: "100%"
                 }}
               >
-                <div style={{ fontSize: "3rem", fontWeight: "900", color: "var(--secondary)", display: "block" }}>
+                <div style={{ fontSize: "3rem", fontWeight: "950", color: "var(--primary)", lineHeight: "1" }} className="unit-value">
                   {String(unit.value).padStart(2, '0')}
                 </div>
-                <div style={{ color: "white", textTransform: "uppercase", letterSpacing: "2px", fontSize: "0.75rem", fontWeight: "700", marginTop: "5px" }}>
+                <div style={{ color: "rgba(0, 59, 92, 0.4)", textTransform: "uppercase", letterSpacing: "1px", fontSize: "0.75rem", fontWeight: "800", marginTop: "10px" }} className="unit-label">
                   {unit.label}
                 </div>
               </motion.div>
             ))}
           </div>
 
-          <p style={{ color: "rgba(255,255,255,0.7)", maxWidth: "600px", margin: "50px auto 0", fontSize: "1.1rem" }}>
+          <p style={{ color: "rgba(255,255,255,0.7)", maxWidth: "600px", margin: "0 auto 50px", fontSize: "1.1rem" }} className="countdown-desc">
             Kami sedang mematangkan "Export OS Engine" untuk menjamin presisi Audit AI di seluruh wilayah Indonesia.
           </p>
           
-          <div style={{ marginTop: "40px", display: "flex", justifyContent: "center", gap: "20px", flexWrap: "wrap" }}>
-             <button className="btn-primary" style={{ background: "white", color: "var(--primary)" }}>
-                Watch Teaser <Play size={18} fill="var(--primary)" />
-             </button>
-             <button className="btn-primary" style={{ background: "transparent", border: "2px solid rgba(255,255,255,0.3)" }}>
-                View Build Log <Zap size={18} />
-             </button>
+          {/* Development Status Tracker */}
+          <div style={{ 
+            marginTop: "60px", 
+            borderTop: "1px solid rgba(255,255,255,0.1)", 
+            paddingTop: "50px",
+            maxWidth: "900px",
+            margin: "60px auto 0"
+          }}>
+            <h4 style={{ color: "white", fontWeight: "800", fontSize: "0.85rem", letterSpacing: "0.15em", marginBottom: "30px", textTransform: "uppercase" }}>
+              Development Lifecycle Status
+            </h4>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "15px" }} className="lifecycle-grid">
+              {devStatus.map((step, idx) => (
+                <div key={idx} style={{ 
+                  background: "rgba(255,255,255,0.03)", 
+                  padding: "18px", 
+                  borderRadius: "20px", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  gap: "10px",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                  textAlign: "left"
+                }}>
+                  <div style={{ color: step.color }}>{step.icon}</div>
+                  <div>
+                    <div style={{ color: "white", fontSize: "0.85rem", fontWeight: "700" }}>{step.label}</div>
+                    <div style={{ color: step.color, fontSize: "0.7rem", fontWeight: "800", textTransform: "uppercase" }}>{step.status}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @media (max-width: 900px) {
+          .countdown-grid { 
+            gap: 5px !important; 
+            padding: 0 4px !important;
+            margin-bottom: 40px !important;
+          }
+          .countdown-card { 
+            padding: 15px 4px !important; 
+            border-radius: 12px !important; 
+            min-width: 0 !important;
+          }
+          .unit-value { font-size: 1.3rem !important; }
+          .unit-label { font-size: 0.45rem !important; margin-top: 4px !important; letter-spacing: 0px !important; }
+          
+          .countdown-box { padding: 40px 8px !important; }
+          h2 { font-size: 1.7rem !important; margin-bottom: 30px !important; }
+          .countdown-desc { font-size: 0.85rem !important; padding: 0 8px !important; }
+          .lifecycle-grid { 
+            grid-template-columns: repeat(2, 1fr) !important; 
+            gap: 10px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
